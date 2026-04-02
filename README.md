@@ -34,7 +34,7 @@ Mutual Aid Board is my way of creating a digital space where people can both giv
 - **Mark Complete** - Update a request status to completed
 - **Delete Request** - Remove a request from the board
 - **Visual Status Tracking** - Sticky note-style cards with different colors for each status
-- **Responsive Design** - Works beautifully on mobile, tablet, and desktop devices
+- **Responsive Design** - Works on mobile, tablet, and desktop devices
 
 ## Setup Instructions
 
@@ -47,6 +47,58 @@ Mutual Aid Board is my way of creating a digital space where people can both giv
 
 ### Installation
 
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/MathiarI/mutual-aid-board.git
+   cd mutual-aid-board
+   ```
+
+2. **Set up the backend**
+   ```bash
+   cd backend
+   npm install
+   ```
+
+   Create a `.env` file in the `backend/` directory:
+   ```
+   MONGO_URI=mongodb+srv://<your-username>:<your-password>@<your-cluster>.mongodb.net/<your-database>
+   ```
+
+   Start the backend server:
+   ```bash
+   node server.js
+   ```
+   You should see:
+   ```
+   Server running on port 3000
+   DB connection success
+   ```
+
+3. **Set up the frontend** (in a new terminal)
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+   Create a `.env` file in the `frontend/` directory:
+   ```
+   VITE_API_URL=http://localhost:3000
+   ```
+
+   Start the frontend dev server:
+   ```bash
+   npm run dev
+   ```
+   You should see:
+   ```
+   Local: http://localhost:5173/
+   ```
+
+4. **Open in browser**
+
+   Navigate to [http://localhost:5173](http://localhost:5173) to use the application.
+
+   > **Note:** Both the backend (port 3000) and frontend (port 5173) must be running simultaneously in separate terminals.
 
 ## API Routes
 
