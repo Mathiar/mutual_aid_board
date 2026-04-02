@@ -1,0 +1,271 @@
+.request-card {
+  background-color: #FFEB3B;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transform: rotate(-1deg);
+  transition: all 0.3s ease;
+  position: relative;
+  max-width: 400px;
+  break-inside: avoid;
+}
+
+/* Sticky note colors based on status */
+.request-card.status-open {
+  background-color: #FFE082;
+  background: linear-gradient(135deg, #FFEB3B 0%, #FFE082 100%);
+}
+
+.request-card.status-claimed {
+  background-color: #81C784;
+  background: linear-gradient(135deg, #A5D6A7 0%, #81C784 100%);
+}
+
+.request-card.status-completed {
+  background-color: #64B5F6;
+  background: linear-gradient(135deg, #90CAF9 0%, #64B5F6 100%);
+}
+
+/* Random rotation for variety */
+.request-card:nth-child(2) {
+  transform: rotate(0.5deg);
+}
+
+.request-card:nth-child(3) {
+  transform: rotate(-1.5deg);
+}
+
+.request-card:nth-child(4) {
+  transform: rotate(1deg);
+}
+
+.request-card:nth-child(5) {
+  transform: rotate(-0.8deg);
+}
+
+.request-card:nth-child(6) {
+  transform: rotate(1.2deg);
+}
+
+.request-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  transform: rotate(-1deg) translateY(-5px);
+}
+
+.request-card.status-open:hover {
+  background: linear-gradient(135deg, #FFF176 0%, #FFEE58 100%);
+}
+
+.request-card.status-claimed:hover {
+  background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+}
+
+.request-card.status-completed:hover {
+  background: linear-gradient(135deg, #BBDEFB 0%, #90CAF9 100%);
+}
+
+/* Sticky note pin effect */
+.request-card::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background-color: #D32F2F;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.card-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.3rem;
+  flex: 1;
+  word-break: break-word;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-badge.status-open {
+  background-color: rgba(139, 69, 19, 0.3);
+  color: #5D4037;
+}
+
+.status-badge.status-claimed {
+  background-color: rgba(27, 94, 32, 0.3);
+  color: #1B5E20;
+}
+
+.status-badge.status-completed {
+  background-color: rgba(13, 71, 161, 0.3);
+  color: #0D47A1;
+}
+
+.card-body {
+  margin-bottom: 1rem;
+}
+
+.description {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(51, 51, 51, 0.2);
+}
+
+.info-item {
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.info-item strong {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.helper-info {
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+  border-left: 3px solid #4CAF50;
+}
+
+.helper-info h4 {
+  margin: 0 0 0.75rem 0;
+  color: #2E7D32;
+  font-size: 0.95rem;
+}
+
+.helper-info .info-item {
+  margin: 0.5rem 0;
+}
+
+.card-timestamps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 1rem 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(51, 51, 51, 0.2);
+}
+
+.card-timestamps small {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 120px;
+}
+
+.btn-claim {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-claim:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.btn-complete {
+  background-color: #2196F3;
+  color: white;
+}
+
+.btn-complete:hover {
+  background-color: #0b7dda;
+  transform: scale(1.05);
+}
+
+.btn-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #da190b;
+  transform: scale(1.05);
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .request-card {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .card-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .status-badge {
+    align-self: flex-start;
+  }
+
+  button {
+    min-width: 100px;
+  }
+}
+
+/* Masonry-like layout for cards */
+@supports (display: grid) {
+  .request-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .request-card {
+    margin-bottom: 0;
+  }
+}
