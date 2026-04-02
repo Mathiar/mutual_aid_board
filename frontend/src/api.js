@@ -4,7 +4,7 @@
  * 
  */
 
-const API_URL = 'http://localhost:3000/requests';
+const API_URL = `${import.meta.env.VITE_API_URL}/requests`;
 
 // GET all requests
 export const getAllRequests = async () => {
