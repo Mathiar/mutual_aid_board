@@ -1,121 +1,181 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+/**App.js
+ * 
+ * description: main app component that manages request state and navigation
+ * 
+ */
+
+import { useState, useEffect } from 'react';
+import { getAllRequests, createRequest, updateRequest, deleteRequest } from './api';
+import Header from './components/Header';
+import Navigation from './components/Navigation';
+import RequestForm from './components/RequestForm';
+import RequestList from './components/RequestList';
+import FilterSearch from './components/FilterSearch';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  // all request state
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  // nav tabs state
+  const [activeTab, setActiveTab] = useState('view-requests');
+  
+  // filtering + searching state
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+
+  // fetch requests on component mounts
+  useEffect(() => {
+    const fetchRequests = async () => {
+      setLoading(true);
+      const data = await getAllRequests();
+      setRequests(data);
+      setLoading(false);
+    };
+    fetchRequests();
+  }, []);
+
+  // add new request
+  const handleAddRequest = async (newRequestData) => {
+    const savedRequest = await createRequest(newRequestData);
+    if (savedRequest) {
+      setRequests([...requests, savedRequest]);
+      
+      setActiveTab('view-requests');
+      // reset filters I think?
+      setSearchTerm('');
+      setStatusFilter('');
+      setCategoryFilter('');
+    }
+  };
+
+  // update request
+  const handleUpdateRequest = async (id, updatedData) => {
+    const updatedRequest = await updateRequest(id, updatedData);
+    if (updatedRequest) {
+      setRequests(requests.map(req => req._id === id ? updatedRequest : req));
+    }
+  };
+
+  // delete request
+  const handleDeleteRequest = async (id) => {
+    const success = await deleteRequest(id);
+    if (success) {
+      setRequests(requests.filter(req => req._id !== id));
+    }
+  };
+
+  // filters and search
+  const getFilteredRequests = () => {
+    let filtered = requests;
+
+    // search filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(req =>
+        req.title.toLowerCase().includes(term) ||
+        req.description.toLowerCase().includes(term)
+      );
+    }
+
+    // status filter
+    if (statusFilter) {
+      filtered = filtered.filter(req => req.status === statusFilter);
+    }
+
+    // category filter
+    if (categoryFilter) {
+      filtered = filtered.filter(req => req.category === categoryFilter);
+    }
+
+    return filtered;
+  };
+
+  // get requests for active tab
+  const getTabRequests = () => {
+    if (activeTab === 'help-someone') {
+      // open requests on "Help Someone" tab
+      return requests.filter(req => req.status === 'Open');
+    }
+    // "View All Requests" tab w/apply filters
+    return getFilteredRequests();
+  };
+
+  const filteredRequests = getTabRequests();
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app">
+      <Header />
+      <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <div className="ticks"></div>
+      <main className="app-main">
+        {/* Make a Request Tab */}
+        {activeTab === 'make-request' && (
+          <section className="tab-content">
+            <RequestForm onAddRequest={handleAddRequest} />
+          </section>
+        )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* Help Someone Tab */}
+        {activeTab === 'help-someone' && (
+          <section className="tab-content">
+            <h2>Open Requests - Help Someone in Need</h2>
+            {loading ? (
+              <p className="loading">Loading requests...</p>
+            ) : (
+              <>
+                <p className="tab-description">
+                  These requests are open and waiting for help. Click "Claim Request" to volunteer your assistance.
+                </p>
+                <RequestList 
+                  requests={filteredRequests}
+                  onUpdateRequest={handleUpdateRequest}
+                  onDeleteRequest={handleDeleteRequest}
+                />
+                {filteredRequests.length === 0 && (
+                  <p className="no-requests">No open requests at this time. Check back soon!</p>
+                )}
+              </>
+            )}
+          </section>
+        )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {/* View All Requests Tab */}
+        {activeTab === 'view-requests' && (
+          <section className="tab-content">
+            <h2>All Requests</h2>
+            <FilterSearch 
+              searchTerm={searchTerm}
+              statusFilter={statusFilter}
+              categoryFilter={categoryFilter}
+              onSearchChange={setSearchTerm}
+              onStatusFilter={setStatusFilter}
+              onCategoryFilter={setCategoryFilter}
+            />
+            {loading ? (
+              <p className="loading">Loading requests...</p>
+            ) : (
+              <>
+                <p className="results-count">
+                  Showing {filteredRequests.length} of {requests.length} requests
+                </p>
+                <RequestList 
+                  requests={filteredRequests}
+                  onUpdateRequest={handleUpdateRequest}
+                  onDeleteRequest={handleDeleteRequest}
+                />
+                {filteredRequests.length === 0 && (
+                  <p className="no-requests">No requests match your filters. Try adjusting your search.</p>
+                )}
+              </>
+            )}
+          </section>
+        )}
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
